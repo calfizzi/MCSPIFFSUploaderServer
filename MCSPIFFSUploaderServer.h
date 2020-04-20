@@ -36,15 +36,17 @@
 
 #define SPIFFS_UPLOAD_SERVER_PORT 2020
 
-
 class MCSPIFFSUploaderServer
 {
   private:
-    String           _JsonArrayListFile(const char* dirname, uint8_t levels);
-    String           _ListFiles(const char* dirname, uint8_t levels);
     fs::FS           *fs;
+    bool              isAsync = false;
     SPIFFSWiFiServer _SPIFFSUploadServer;
-    class      _JsonSPIFFSMessage
+    String           _JsonArrayListFile ( const char* dirname, uint8_t levels);
+    String           _ListFiles         ( const char* dirname, uint8_t levels);
+    void             _handle            ( void );
+    static void      _AsyncLoop         ( void );
+    class _JsonSPIFFSMessage
     {
       private:
         String _get       ( String str, String key );
@@ -63,9 +65,10 @@ class MCSPIFFSUploaderServer
         bool IsCorrect();
     };
   public: 
-    MCSPIFFSUploaderServer() {}
-    void              begin  ( uint16_t port = SPIFFS_UPLOAD_SERVER_PORT );
-    void              handle ( void );
+                      MCSPIFFSUploaderServer        ( void ) {}
+    void              begin                         ( uint16_t port = SPIFFS_UPLOAD_SERVER_PORT );
+    void              handle                        ( void );
+    void              StartAsync                    ( uint32_t wait = 100 ); // 100mills
 };
 
 extern MCSPIFFSUploaderServer MCSPIFFSUploader_instance;

@@ -8,6 +8,13 @@
    Location: https://github.com/calfizzi/MCSPIFFSUploaderServer
 
 */
+#include <Esp.h>
+#include <thread>
+#include <chrono>
+#include <esp_wifi.h>
+#include <esp_pthread.h>
+//#include <freertos/FreeRTOS.h>
+//#include <freertos/task.h>
 
 #include "MCSPIFFSUploaderServer.h"
 
@@ -22,7 +29,8 @@
 #endif
 
 
-
+std::thread MCSPIFFSUploaderThread;
+std::chrono::milliseconds wait_millis = std::chrono::milliseconds{100}; // 100 millis
 MCSPIFFSUploaderServer MCSPIFFSUploader_instance;
 
 String MCSPIFFSUploaderServer::_JsonArrayListFile(const char* dirname, uint8_t levels)
@@ -93,12 +101,12 @@ String MCSPIFFSUploaderServer::_ListFiles(const char* dirname, uint8_t levels)
 #endif
   return Data;
 }
-void MCSPIFFSUploaderServer::begin(uint16_t port)
+void MCSPIFFSUploaderServer::begin   ( uint16_t port)
 {
   this->_SPIFFSUploadServer.begin(port);
   this->fs = &SPIFFS;
 }
-void MCSPIFFSUploaderServer::handle()
+void MCSPIFFSUploaderServer::_handle ( void )
 {
   WiFiClient client = this->_SPIFFSUploadServer.available();
   while (client)
@@ -389,5 +397,26 @@ size_t MCSPIFFSUploaderServer::_JsonSPIFFSMessage::_getDouble(String str, String
   String Value = _get(str, key);
   return atof(Value.c_str());
 }
-
+void MCSPIFFSUploaderServer::handle(void)
+{
+  if (!this->isAsync)
+    this->_handle();
+}
+void MCSPIFFSUploaderServer::_AsyncLoop(void) {
+    Serial.println("starting MCSPIFFSUploaderServer as Async");
+    while(true) {
+        MCSPIFFSUploader._handle();
+        std::this_thread::sleep_for(wait_millis);
+    }
+}
+void MCSPIFFSUploaderServer::StartAsync( uint32_t wait)
+{
+  this->isAsync = true;
+  esp_pthread_cfg_t cfg;
+  cfg.prio = 0; 
+  cfg.stack_size = 1024*4; // adjust as needed
+  esp_pthread_set_cfg(&cfg);
+  wait_millis = std::chrono::milliseconds{wait};
+  MCSPIFFSUploaderThread = std::thread(_AsyncLoop);
+}
 
