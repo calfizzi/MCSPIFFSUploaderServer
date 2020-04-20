@@ -17,7 +17,7 @@
   #include <FS.h>  
   #include <SPIFFS.h>
   #include <WiFiServer.h>
-  #define SPIFFSWifiServer  WifiServer
+  #define SPIFFSWiFiServer  WiFiServer
 
 #elif defined(ESP8266)
   #include <ESP8266WiFi.h>
@@ -43,7 +43,7 @@ class MCSPIFFSUploaderServer
     String           _JsonArrayListFile(const char* dirname, uint8_t levels);
     String           _ListFiles(const char* dirname, uint8_t levels);
     fs::FS           *fs;
-    SPIFFSWifiServer _SPIFFSUploadServer;
+    SPIFFSWiFiServer _SPIFFSUploadServer;
     class      _JsonSPIFFSMessage
     {
       private:
