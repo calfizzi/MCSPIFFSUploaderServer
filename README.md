@@ -1,5 +1,34 @@
 # MCSPIFFSUploaderServer
 
-## soon.... 
+## Methods
+```
+    void              begin                         ( uint16_t port = SPIFFS_UPLOAD_SERVER_PORT );
+    void              handle                        ( void );
+    void              StartAsync                    ( uint32_t wait = 100 ); // 100mills
+```
 
-## description and examples are still working in progress!!!!
+## Use of MCSPIFFSUploaderServer
+```
+  #include <MCSPIFFSUploaderServer.h>
+  void setup()
+  {
+    MCSPIFFSUploader.begin();
+  }
+  void loop()
+  {
+    MCSPIFFSUploader.handle();
+  }
+```  
+ ## Or....
+```
+  #include <MCSPIFFSUploaderServer.h>
+  void setup()
+  {
+    MCSPIFFSUploader.begin();
+    MCSPIFFSUploader.StartAsync();
+  }
+  void loop()
+  {
+  }
+```
+
