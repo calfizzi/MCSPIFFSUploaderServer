@@ -30,8 +30,8 @@
 #endif
 
 
-const char* ssid      = "MONKEY";
-const char* password  = "calfizzinathy";
+const char* ssid      = "[YOUR SAID]";
+const char* password  = "[YOUR SSID PASSWORD]";
 
 WEBServer webServer(80);
 
