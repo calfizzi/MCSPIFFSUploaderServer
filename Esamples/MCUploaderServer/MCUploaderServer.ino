@@ -12,7 +12,7 @@
   #include <ESPmDNS.h>
   #include <WebServer.h>
   #include <FS.h>   // Include the SPIFFS library
-  #include <SPIFFS.h>
+  #include <SPIFFS.h> // Include the SPIFFS library
   #define WEBServer WebServer
 #elif defined(ESP8266)
   #include <ESP8266WiFi.h>
@@ -86,17 +86,6 @@ bool    WebServerFileReadAndSend    ( String path){
   if(SPIFFS.exists(path))
   {
     File file = SPIFFS.open(path, FILE_READ);
-    //webServer.setContentLength(file.size());
-    //webServer.send(200, contentType,"");
-    //byte buf[128];
-    //for (size_t i = 0; i < file.size(); i++)
-    //{
-    //  size_t currentSize = file.size()-i;
-    //  currentSize  = currentSize >128? 128 : currentSize ;
-    //  file.read(buf,currentSize);
-    //  webServer.client().write(buf, currentSize);
-    //}
-    //webServer.sendContent("");
     webServer.streamFile(file, contentType);
     file.close();
     webServer.client().stop();
@@ -180,8 +169,6 @@ void reconnectWiFi()
   {
     ms = millis();
   }
-  //if (!IsConnected  && WasConnected )
-  //  Serial.print('.');
 }
 
 // the setup function runs once when you press reset or power the board
