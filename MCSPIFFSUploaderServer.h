@@ -17,6 +17,11 @@
   #include <FS.h>  
   #include <SPIFFS.h>
   #include <WiFiServer.h>
+  #include <Esp.h>
+  #include <thread>
+  #include <chrono>
+  #include <esp_wifi.h>
+  #include <esp_pthread.h>
   #define SPIFFSWiFiServer  WiFiServer
 
 #elif defined(ESP8266)

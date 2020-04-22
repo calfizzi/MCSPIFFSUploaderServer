@@ -8,11 +8,6 @@
    Location: https://github.com/calfizzi/MCSPIFFSUploaderServer
 
 */
-#include <Esp.h>
-#include <thread>
-#include <chrono>
-#include <esp_wifi.h>
-#include <esp_pthread.h>
 //#include <freertos/FreeRTOS.h>
 //#include <freertos/task.h>
 
@@ -29,9 +24,9 @@
 #endif
 
 
-std::thread MCSPIFFSUploaderThread;
-std::chrono::milliseconds wait_millis = std::chrono::milliseconds{100}; // 100 millis
-MCSPIFFSUploaderServer MCSPIFFSUploader_instance;
+std::thread               MCSPIFFSUploaderThread;
+std::chrono::milliseconds wait_millis;
+MCSPIFFSUploaderServer    MCSPIFFSUploader_instance;
 
 String MCSPIFFSUploaderServer::_JsonArrayListFile(const char* dirname, uint8_t levels)
 {
@@ -103,6 +98,7 @@ String MCSPIFFSUploaderServer::_ListFiles(const char* dirname, uint8_t levels)
 }
 void MCSPIFFSUploaderServer::begin   ( uint16_t port)
 {
+  SPIFFS.begin();
   this->_SPIFFSUploadServer.begin(port);
   this->fs = &SPIFFS;
 }

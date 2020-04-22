@@ -483,12 +483,16 @@ namespace SPIFFSUploader
         Point ScreenPoint = new Point(e.X, e.Y);
         //Point ControlPoint = SPIFFS.PointToClient(ScreenPoint);
         TreeNode current = SPIFFS.GetNodeAt(ScreenPoint);
-        SPIFFS.SelectedNode = current;
-        ContextMenu cm = new ContextMenu();
-        cm.MenuItems.Add("Delete", new EventHandler(SPIFFS_Delete_Click));
-        if (current.IsFolder())
-          cm.MenuItems.Add("Create Folder", new EventHandler(SPIFFS_CreateFolder_Click));
-        SPIFFS.ContextMenu = cm;
+        if (current != null)
+        {
+          SPIFFS.SelectedNode = current;
+          ContextMenu cm = new ContextMenu();
+          if (current != SPIFFS.Nodes[0])
+            cm.MenuItems.Add("Delete", new EventHandler(SPIFFS_Delete_Click));
+          if (current.IsFolder())
+            cm.MenuItems.Add("Create Folder", new EventHandler(SPIFFS_CreateFolder_Click));
+          SPIFFS.ContextMenu = cm;
+        }
       }
     }
     private void SPIFFS_MouseMove(object sender, MouseEventArgs e)
