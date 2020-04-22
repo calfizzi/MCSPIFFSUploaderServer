@@ -1,0 +1,28 @@
+body {font-family: verdana;}
+a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-family: verdana;
+    background-color: #80B0E0;
+    padding: 5px 10px 5px 10px;
+    border: 1px solid #4080A0;
+    border-radius: 10px;
+    display: inline-block;
+    box-shadow: grey 5px 5px 10px;
+}
+a:hover {
+    color: #FFFF00;
+    background-color: #70A0D0;
+}
+a:active{
+  text-decoration: none;
+   box-shadow: grey 2px 2px 2px;
+   margin: 3px 3px 3px 3px;
+}
+.feed {
+  position: fixed;
+  font-size: 12px;
+  color: #4080A0;
+  bottom: 20;
+  right: 10;
+}
