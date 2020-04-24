@@ -70,7 +70,7 @@ class MCSPIFFSUploaderServer
         bool IsCorrect();
     };
   public: 
-                      MCSPIFFSUploaderServer        ( void ) {}
+                      MCSPIFFSUploaderServer        ( const int  port = SPIFFS_UPLOAD_SERVER_PORT);
     void              begin                         ( uint16_t port = SPIFFS_UPLOAD_SERVER_PORT );
     void              handle                        ( void );
     void              StartAsync                    ( uint32_t wait = 100 ); // 100mills

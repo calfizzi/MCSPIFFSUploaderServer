@@ -98,6 +98,7 @@ String MCSPIFFSUploaderServer::_ListFiles(const char* dirname, uint8_t levels)
 }
 void MCSPIFFSUploaderServer::begin   ( uint16_t port)
 {
+  this->_SPIFFSUploadServer.close();
 #if defined(ESP32)
     SPIFFS.begin(true);
 #elif defined(ESP8266)
@@ -420,3 +421,8 @@ void MCSPIFFSUploaderServer::StartAsync( uint32_t wait)
   MCSPIFFSUploaderThread = std::thread(_AsyncLoop);
 }
 
+MCSPIFFSUploaderServer::MCSPIFFSUploaderServer(const int  port): 
+ _SPIFFSUploadServer(port)
+{
+
+}
