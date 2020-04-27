@@ -349,6 +349,13 @@ namespace SPIFFSUploader
       }
       */
     }
+    private string SPIFFS_Remove_SPIFFSFormPath(string path)
+    {
+      string returnData = path;
+      if (returnData.IndexOf("SPIFFS") == 0)
+        returnData = returnData.Substring(("SPIFFS").Length);
+      return returnData;
+    }
     private void SPIFFS_DragDrop(object sender, DragEventArgs e)
     {
       Cursor = Cursors.WaitCursor;
@@ -394,14 +401,16 @@ namespace SPIFFSUploader
               string fileName = Path.GetFileName(files[i]);
               CurrentFileSize = (int)fi.Length;
               string path = files[i].Substring(originFolderPath.Length);
-              String folderPath = Path.GetDirectoryName(path);
-              path = path.Replace("\\", "/");
+              String folderPath = SPIFFS.SelectedNode.FullPath + Path.GetDirectoryName(path);
+              string fullpath= SPIFFS_Remove_SPIFFSFormPath(SPIFFS.SelectedNode.FullPath);
+              path = fullpath.Replace("\\", "/") +  path.Replace("\\", "/");
+              path = path.Replace("//", "/");
               ESP_SPIFFS.Put(files[i], path);
               SumFileSize += CurrentFileSize;
               ESP_fsInfo.fs.Add(new SPIFFSFileManager.FileData(path, CurrentFileSize));
 
-              TreeNode node = SPIFFS.Nodes.FindTreeNodeByFullPath("SPIFFS" + folderPath);
-              TreeNode nodeToDelete = SPIFFS.Nodes.FindTreeNodeByPartialPath("SPIFFS" + folderPath + fileName);
+              TreeNode node = SPIFFS.Nodes.FindTreeNodeByFullPath(folderPath);
+              TreeNode nodeToDelete = SPIFFS.Nodes.FindTreeNodeByPartialPath(folderPath + fileName);
               if (nodeToDelete!=null)
                 node.Nodes.Remove(nodeToDelete);
               node = node.Nodes.Add(fileName);
@@ -510,7 +519,7 @@ namespace SPIFFSUploader
     }
     private string SPIFFS_GetFullPath(TreeNode node)
     {
-      string retrunData = node.FullPath.Replace("SPIFFS\\", "/").Replace("SPIFFS", "/").Replace("\\", "/");
+      string retrunData = SPIFFS_Remove_SPIFFSFormPath(node.FullPath).Replace("\\", "/");
       int index = retrunData.IndexOf(" ");
       if (index >= 0)
         retrunData = retrunData.Substring(0, index);
@@ -522,7 +531,7 @@ namespace SPIFFSUploader
       PathFiles = Node.GetAllNodesFullPath(1);
       for (int i = 0; i < PathFiles.Count; i++)
       {
-        PathFiles[i] = PathFiles[i].Replace("SPIFFS", "").Replace("\\", "/");
+        PathFiles[i] = SPIFFS_Remove_SPIFFSFormPath( PathFiles[i]).Replace("\\", "/");
         int indexSpace = PathFiles[i].IndexOf(" ");
         if (indexSpace >= 0)
           PathFiles[i] = PathFiles[i].Substring(0, indexSpace);
